@@ -50,7 +50,7 @@ const Modal: React.FC <ModalProps> = ({
 
                             <h2 className="text-lg font-bold">{label}</h2>
                         </header>
-                        
+
                         <section className="p-6 border-gray-300">
                             {content}
                         </section>

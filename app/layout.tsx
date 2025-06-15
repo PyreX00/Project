@@ -36,8 +36,6 @@ export default function RootLayout({
          <div className ="pt-30">
           {children}
          </div>
-
-        
       </body>
     </html>
   );

@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"; 
 import Navbar from "./components/navbar/Navbar";
 import LoginModal from "./components/modals/LoginModal";
-import Modal from "./components/modals/Modal";
+import SignupModal from "./components/modals/SignupModal";
 
 
 
@@ -36,6 +36,10 @@ export default function RootLayout({
          <div className ="pt-30">
           {children}
          </div>
+
+         <LoginModal/>
+         <SignupModal/>
+
       </body>
     </html>
   );

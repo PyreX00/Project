@@ -1,10 +1,12 @@
 asgiref==3.9.1
 Django==5.2.4
+djangorestframework==3.16.0
 psycopg2-binary==2.9.10
 sqlparse==0.5.3
 dj-rest-auth==4.0.0
 django-allauth==0.52.0
-django-cors-headers==4.3.1
-djagnorestframework==3.14.0
-djagnorestframework-simplejwt==5.3.1
+django-cors-headers==4.7.0
+djangorestframework-simplejwt==5.3.1
 pillow==10.2.0
+channels==4.0.0
+daphne==4.0.0

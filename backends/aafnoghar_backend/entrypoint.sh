@@ -10,6 +10,7 @@ if [ "$DATABASE" = "postgres" ]; then
     echo "Database is up and running"
 fi
 
+python manage.py makemigrations
 python manage.py migrate
 
 exec "$@"

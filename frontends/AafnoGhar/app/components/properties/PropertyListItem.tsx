@@ -1,13 +1,21 @@
  import Image from 'next/image' 
+ import { PropertyType } from './PropertyList';
+
+ interface PropertyProps{
+    property:PropertyType
+ }
 
 
- const PropertyListItem = () =>{
+ const PropertyListItem: React.FC<PropertyProps >= ({
+    property
+
+}) =>{
     return(
 
 <div className="cursor-pointer">
   <div className="relative overflow-hidden aspect-square rounded-xl">
     <Image
-      src="/room-1.jpg"
+      src={property.image_url}
       alt="Loading"
       fill
       sizes="(max-width: 768px) 768px, (max-width: 1200px) 768px, 768px"
@@ -16,11 +24,11 @@
   </div>
 
   <div className = "mt-2">
-    <p className='text-lg font-bold'>Property Name</p>
+    <p className='text-lg font-bold'>{property.title}</p>
   </div>
 
   <div className = "mt-2">
-    <p className='text-sm text-gray-500 '><strong>Rs 12000</strong></p>
+    <p className='text-sm text-gray-500 '><strong>Rs {property.rent} </strong></p>
   </div>
 </div>
 

@@ -12,3 +12,4 @@ class PropertiesListSerializers(serializers.ModelSerializer):
             'rent',
             'image_url', 
         ]
+        

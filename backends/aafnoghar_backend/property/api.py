@@ -1,7 +1,9 @@
 from django.http import JsonResponse
 
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view,  parser_classes, authentication_classes, permission_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 
+from .forms import PropertyForm
 from .models import Property
 from .serializer import PropertiesListSerializers
 
@@ -15,3 +17,18 @@ def properties_list(request):
     return JsonResponse({
         'data':serializer.data
     })
+    
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])
+def create_property(request):
+    form = PropertyForm(request.POST, request.FILES)
+    
+    if form.is_valid():
+        property = form.save(commit = False)
+        property.landlord = request.user
+        property.save()
+        
+        return JsonResponse({"success": True})
+    else:
+        print('error', form.errors, form.non_field_errors )
+        return JsonResponse({'errors': form.errors.as_json()},status = 400)  

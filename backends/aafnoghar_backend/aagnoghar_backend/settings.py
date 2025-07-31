@@ -31,7 +31,7 @@ ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
 SITE_ID = 1
 
-WEBSITE_URL = 'http://localhost:8000'
+WEBSITE_URL = 'http://localhost:8000/'
 
 SIMPLE_JWT = {
     "ACCES_TOKEN_LIFETIME": timedelta(minutes=60),
@@ -50,17 +50,20 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = None
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATIONS_CLASSES':(
-        'rest_framework_simplejwt.authentication.JWTAuthenticaton',
-    ),
-    "DEFAULT_PERMISSION_CLASSES":(
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # or 'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    )
+        # maybe IsAuthenticatedOrReadOnly or AllowAny for certain views
+    ],
 }
 
+
 CORS_ALLOWED_ORIGIN = [
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:3000',
+    'http://127.0.0.1:8000/',
+    'http://127.0.0.1:3000/',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

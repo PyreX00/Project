@@ -48,7 +48,6 @@ const AddPropertyModal = () => {
 
 
     const submitForm = async () => {
-        console.log('submitform');
         if (
                 dataCategory &&
                 dataTitle &&
@@ -73,6 +72,7 @@ const AddPropertyModal = () => {
                 formData.append('location', dataLocation.trim());  
                 formData.append('size', dataSize);             
                 formData.append('rent', dataRent.toString()); 
+                formData.append('image', dataImage);
 
 
                 if (dataKitchen) formData.append('kitchen', dataKitchen);
@@ -88,7 +88,7 @@ const AddPropertyModal = () => {
                     addPropertyModal.close();
     
                 }else{
-                    console.log('Error  ')
+                    console.log('Error')
                 }
             }
                 }
@@ -274,7 +274,7 @@ const AddPropertyModal = () => {
                                     type='file'
                                     accept='image/*'
                                     onChange={setImage}
-                                ></input>
+                                />
                             </div>
                             {dataImage && (
                                 <div className='w-[200px] h-[150px] relative mb-6'>
@@ -283,6 +283,7 @@ const AddPropertyModal = () => {
                                         alt="Uploaded image"
                                         src ={URL.createObjectURL(dataImage)}
                                         className="w-full h-full object-cover rounded-xl"
+                                        onError={(e) => console.log('Image load error:', e)}
                                     />
                                 </div>
                             )}

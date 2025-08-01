@@ -6,6 +6,7 @@ const apiService = {
 
         const token = await getAccessToken();
 
+        console.log('Token:', localStorage.getItem('token'))
         return new Promise((resolve, reject) => {
             fetch(`${process.env.NEXT_PUBLIC_API_HOST}${url}`, {
                 method: "GET",

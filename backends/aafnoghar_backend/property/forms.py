@@ -16,4 +16,5 @@ class PropertyForm(ModelForm):
             'size',
             'location',
             'no_of_people',
+            'image',
         ) 

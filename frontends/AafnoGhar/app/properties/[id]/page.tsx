@@ -1,9 +1,14 @@
-import Image from 'next/image'
+  import Image from 'next/image'
 import ProperytDetails from '@/app/components/properties/PropertyDetails';
 import ReservationSidebar from '@/app/components/properties/ReservationSidebar';
 import LoadImages from '@/app/components/properties/LoadImages';
+import apiService from '@/app/services/apiService';
 
-const PropteryDetailPage = () =>{
+const PropteryDetailPage = async ({params}:{params : { id : string}}) =>{
+
+    const property = await apiService.get(`/api/properties/${params.id}`)
+
+
     return (
         <main className = 'w-full  px-6'>
              <div className =' max-w-[2000] mx-auto  mt-4 grid grid-cols-1 md:grid-cols-4 flex'>
@@ -12,7 +17,7 @@ const PropteryDetailPage = () =>{
                   </div>
                   <div className=''>
                     <div>
-                        <h1 className='mb-4 text-4xl'>Property Name</h1>
+                        <h1 className='mb-4 text-4xl'>{property.title}</h1>
                         <ProperytDetails/>
                     </div>
                   </div>
@@ -37,9 +42,7 @@ const PropteryDetailPage = () =>{
                         </div>
                         </div>
                     <div>
-                            MAP aksjdfhkasdhfasdkjhfiasdfihasudfhisadf aisdufhasdf isahfkas dfihasdkjfh 
-                            sdifhasidfhasdifhasdif asdifhadisufhas difhuaishdfi aushdfiashfias dfkajshf
-                            iashdf isufhiausdhfius fhisudfhaisufdh aisufhasjidfhsjdfh
+                            {property.description}
                         </div>
                   </div>
 

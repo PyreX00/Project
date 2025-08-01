@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from .forms import PropertyForm
 from .models import Property
-from .serializer import PropertiesListSerializers
+from .serializer import PropertiesListSerializers, PropertyDetailSerializer
 
 @api_view(['GET'])
 @authentication_classes([])
@@ -32,3 +32,15 @@ def create_property(request):
     else:
         print('error', form.errors, form.non_field_errors )
         return JsonResponse({'errors': form.errors.as_json()},status = 400)  
+    
+    
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def properties_detail(request,pk):
+    property = Property.objects.get(pk=pk)
+    
+    serializer = PropertyDetailSerializer(property, many = False)
+    
+    return JsonResponse(serializer.data)

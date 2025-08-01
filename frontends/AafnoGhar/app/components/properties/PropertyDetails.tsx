@@ -1,8 +1,11 @@
 import Image from 'next/image';
+import apiService from '@/app/services/apiService';
 
-const PropertyDetails = () => {
+const PropertyDetails = async ({params}:{params : { id : string}}) => {
+const property = await apiService.get(`/api/properties/${params.id}`)
+
   const features = [
-    { label: 'Bedroom', icon: '/icons/bedroom.svg', value: 3 },
+    { label: 'Bedroom', icon: '/icons/bedroom.svg', value: 1},
     { label: 'Kitchen', icon: '/icons/bedroom.svg', value: 1 },
     { label: 'Toilet', icon: '/icons/bedroom.svg', value: 2 },
     { label: 'Parking', icon: '/icons/bedroom.svg', value: 'no'},
@@ -13,6 +16,7 @@ const PropertyDetails = () => {
     { label: 'family', icon: '/icons/bedroom.svg', value: 4 },
 
   ];
+  
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 gap-6 max-w-4xl mx-auto mt-10 px-4">

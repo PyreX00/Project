@@ -15,6 +15,7 @@ const AddPropertyModal = () => {
 
     //states
     const [currentStep, setCurrentStep ] = useState(1);
+    const [errors, setErrors] = useState<string []>([]);
     const [dataCategory, setDataCategory] = useState('');
     const [dataTitle, setDataTitle] = useState('');
     const [dataDescription,setDataDescription] = useState('');
@@ -89,6 +90,12 @@ const AddPropertyModal = () => {
     
                 }else{
                     console.log('Error')
+
+                    const tmpErrors: string[] = Object.values(response).map((error: any) => {
+                        return error;
+                    });
+
+                    setErrors(tmpErrors)
                 }
             }
                 }
@@ -176,7 +183,7 @@ const AddPropertyModal = () => {
             <div className="flex flex-col space-y-2">
                 <label>Bedrooms</label>
                 <input
-                    type='text'
+                    type='number'
                     value={dataBedroom}
                     onChange={(e) => setDataBedroom((e.target.value))}
                     className="w-full p-4 border border-gray-600 rounded-xl"
@@ -185,7 +192,7 @@ const AddPropertyModal = () => {
             <div className="flex flex-col space-y-2">
                 <label>Kitchen</label>
                 <input
-                    type='text'
+                    type='number'
                     value={dataKitchen}
                     onChange={(e) => setDataKitchen((e.target.value))}
                     className="w-full p-4 border border-gray-600 rounded-xl"
@@ -194,7 +201,7 @@ const AddPropertyModal = () => {
             <div className="flex flex-col space-y-2">
                 <label>Toilet</label>
                 <input
-                    type='text'
+                    type='number'
                     value={dataToilet}
                     onChange={(e) => setDataToilet((e.target.value))}
                     className="w-full p-4 border border-gray-600 rounded-xl"
@@ -244,7 +251,7 @@ const AddPropertyModal = () => {
             <div className="flex flex-col space-y-2">
                 <label>No of people</label>
                 <input
-                    type='text'
+                    type='number'
                     value={datano_of_people}
                     onChange={(e) => setDatano_of_people((e.target.value))}
                     className="w-full p-4 border border-gray-600 rounded-xl"
@@ -289,7 +296,15 @@ const AddPropertyModal = () => {
                             )}
                         </div>
 
+                            
+                            {errors.map((error,index)=>{   
+                                <div 
+                                    key={index}    
+                                    className='p-5 mb-4 bg-aribnb text-white rounded-xl opacity-80'>
+                                        {error}
+                                </div>
 
+                            })}
                         <div className="flex gap-4 mt-6">
                             <CustomButton 
                                 label='Previous'

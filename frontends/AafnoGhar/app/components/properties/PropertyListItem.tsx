@@ -1,5 +1,6 @@
  import Image from 'next/image' 
  import { PropertyType } from './PropertyList';
+ import  { useRouter } from 'next/navigation';
 
  interface PropertyProps{
     property:PropertyType
@@ -10,9 +11,15 @@
     property
 
 }) =>{
+
+    const router = useRouter();
     return(
 
-<div className="cursor-pointer">
+<div 
+    className="cursor-pointer"
+    onClick={()=> router.push(`properties/${property.id}`)}
+    >
+
   <div className="relative overflow-hidden aspect-square rounded-xl">
     <Image
       src={property.image_url}
@@ -28,7 +35,7 @@
   </div>
 
   <div className = "mt-2">
-    <p className='text-sm text-gray-500 '><strong>Rs {property.rent} </strong></p>
+    <p className='text-sm text-gray-500 '><strong>Rs {property.rent} Monthly</strong></p>
   </div>
 </div>
 

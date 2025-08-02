@@ -21,22 +21,28 @@ const PropteryDetailPage = async ({params}:{params : { id : string}}) =>{
                         <ProperytDetails params={params} /> 
                     </div>
                   </div>
-            </div>
-                
+            </div>     
             <div className ='mt-4 grid grid-cols-1 md:grid-cols-4 gap-5 '>
                   <div className='pr-6 col-span-3'>
                     <div className =" flex items-center space-x-4">
                         <div className="py-6 flex items-center space-x-4">
+                          {property.landlord.avatar_url || (
                         <Image 
-                            src="/profile-2.webp"
+                            src={
+                                property.landlord.avatar_url || 
+                                (property.landlord.gender === 'M' || property.landlord.gender === 'male' 
+                                    ? '/male.jpg' 
+                                    : '/female.jpeg')
+                            }
                             alt="Profile"
                             width={50}
                             height={50}
                             className="rounded-full object-cover"
                         />
+                        )}
 
                         <div className="flex flex-col">
-                            <p className="text-lx"><strong>Pyrex</strong></p>
+                            <p className="text-lx"><strong>{property.landlord.name}</strong></p>
                             <p className="text-xs text-gray-600">+977-9800000000</p>
                         </div>
                         </div>
@@ -47,7 +53,10 @@ const PropteryDetailPage = async ({params}:{params : { id : string}}) =>{
                   </div>
 
                   <div className=''>
-                    <ReservationSidebar/> 
+                    <ReservationSidebar
+
+                      property={property}
+                    /> 
                   </div>
                   
             </div>

@@ -19,7 +19,6 @@
     className="cursor-pointer"
     onClick={()=> router.push(`properties/${property.id}`)}
     >
-
   <div className="relative overflow-hidden aspect-square rounded-xl">
     <Image
       src={property.image_url}

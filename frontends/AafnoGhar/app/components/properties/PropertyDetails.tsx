@@ -4,7 +4,6 @@ import apiService from '@/app/services/apiService';
 const PropertyDetails = async ({params}:{params : { id : string}}) => {
 const property = await apiService.get(`/api/properties/${params.id}`)
 
-  // Helper function to convert codes to readable text
   const formatValue = (key: string, value: any) => {
     if (!value) return 'N/A';
     

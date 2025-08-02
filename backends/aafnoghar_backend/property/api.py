@@ -2,6 +2,7 @@ from django.http import JsonResponse
 
 from rest_framework.decorators import api_view,  parser_classes, authentication_classes, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
+from .models import Reservation
 
 from .forms import PropertyForm
 from .models import Property
@@ -44,3 +45,28 @@ def properties_detail(request,pk):
     serializer = PropertyDetailSerializer(property, many = False)
     
     return JsonResponse(serializer.data)
+
+
+
+@api_view(['POST'])
+def book_property(request,pk):
+    try:
+        guests = request.POST.get('guests')
+        renter = request.POST.get('renter')
+        profession = request.POST.get('profession')
+        
+        property_obj = Property.objects.get(pk=pk)
+        
+        Reservation.objects.create(
+            property = property_obj,
+            guests=guests,
+            renter=renter,
+            profession=profession,
+            created_by = request.user    
+        )
+        
+        return JsonResponse({'success':True})
+    except Exception as e:
+        print("Error", e)
+        
+        return JsonResponse({'success':False})

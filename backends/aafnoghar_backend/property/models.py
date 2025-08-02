@@ -62,4 +62,27 @@ class Property(models.Model):
         if self.image and hasattr(self.image, 'url'):
             return f'{settings.WEBSITE_URL}{self.image.url}'
         
+
+class Reservation(models.Model):
+    
+    MALE = 'M'
+    FEMALE = 'F'
+    FAMILY = "FL"
+    
+    PREFERRED_CHOICES = [
+        (MALE,'Male'),
+        (FEMALE,'Female'),
+        (FAMILY,'Family')
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    property = models.ForeignKey(Property, related_name='reservations',on_delete=models.CASCADE)
+    guests = models.IntegerField()
+    profession = models.CharField(max_length=255)
+    renter = models.CharField(max_length=2,choices=PREFERRED_CHOICES,default=MALE)
+    created_by = models.ForeignKey(User, related_name='reservations', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+
+        
     

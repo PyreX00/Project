@@ -18,7 +18,7 @@ const PropteryDetailPage = async ({params}:{params : { id : string}}) =>{
                   <div className=''>
                     <div>
                         <h1 className='mb-4 text-4xl'>{property.title}</h1>
-                        <ProperytDetails/>
+                        <ProperytDetails params={params} /> 
                     </div>
                   </div>
             </div>

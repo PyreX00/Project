@@ -104,11 +104,15 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
 
             
             <button
-                onClick={preformbooking}
-                className="w-full mb-5 py-4 text-xl text-center text-white bg-airbnb rounded-xl hover:bg-airbnb-dark transition-colors font-semibold"
-            >
-                Book an Appointment
-            </button>
+                onClick={() => {
+                        preformbooking();
+                        alert("Booking successful");
+                    }}
+                    className="w-full mb-5 py-4 text-xl text-center text-white bg-airbnb rounded-xl hover:bg-airbnb-dark transition-colors font-semibold"
+                >
+                    Book an Appointment
+                </button>
+            
 
         </aside>
     )

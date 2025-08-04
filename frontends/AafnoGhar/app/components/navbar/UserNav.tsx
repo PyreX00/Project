@@ -18,7 +18,7 @@ const UserNav: React.FC<UserNavProps> = ({
         userId
     }) =>{
 
-    const router = useRouter();
+    const router = useRouter();   
     const loginModal = useLoginModal();
     const signupModal = useSignupModal();
 
@@ -48,6 +48,12 @@ const UserNav: React.FC<UserNavProps> = ({
                             label = "My properties"
                             onClick={() => {setIsOpen(false);
                                 router.push('/myproperties');
+                            }} 
+                        />
+                        <MenuLink
+                            label = "My reservations"
+                            onClick={() => {setIsOpen(false);
+                                router.push('/myreservations');
                             }} 
                         />
 

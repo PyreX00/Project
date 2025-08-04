@@ -6,7 +6,7 @@ from .models import Reservation
 
 from .forms import PropertyForm
 from .models import Property
-from .serializer import PropertiesListSerializers, PropertyDetailSerializer
+from .serializer import PropertiesListSerializers, PropertyDetailSerializer, ReservationListSerializer
 
 @api_view(['GET'])
 @authentication_classes([])
@@ -75,6 +75,7 @@ def book_property(request,pk):
         
         return JsonResponse({'success':False})
     
+    
 
 @api_view(['POST'])
 def toggle_favorite(request,pk):
@@ -88,3 +89,4 @@ def toggle_favorite(request,pk):
         property.favorited.add(request.user)
         
         return JsonResponse({'is_favorited': True})
+    

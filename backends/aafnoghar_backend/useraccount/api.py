@@ -16,13 +16,13 @@ def landlord_detail(request,pk):
     
     return JsonResponse(serializer.data,safe=False)
 
-
 @api_view(['GET'])
 def reservation_list(request):
     reservations = request.user.reservations.all()
     serializer = ReservationListSerializer(reservations, many=True)
     
     return JsonResponse(serializer.data,safe=False)
+    
     
     
     

@@ -46,7 +46,15 @@ const PropertyList: React.FC<PropertyListProps> = ({
             }
 
             const tmpProperties = await apiService.get(url)
-            setProperties(tmpProperties.data)
+            setProperties(tmpProperties.data.map((property:PropertyType) =>{
+                if (tmpProperties.favorites.includes(property.id)){
+                    property.is_favorite = true
+                } else {
+                    property.is_favorite =false
+                }
+
+                return property
+            }));
         } catch (error) {
             console.error('Failed to fetch properties:', error);
         }
@@ -71,4 +79,4 @@ const PropertyList: React.FC<PropertyListProps> = ({
     )
 }
 
-export default PropertyList
+export default PropertyList 

@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     
     'useraccount',
     'property',
+    'chat',
     
     
     'rest_framework',

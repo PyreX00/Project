@@ -52,7 +52,7 @@ class Property(models.Model):
     size = models.CharField(max_length=2,  choices = SIZE_CHOICES, default=MEDIUM)
     location = models.CharField(max_length=255)
     no_of_people = models.PositiveIntegerField(null=True,blank=True)
-    favorited = models.ManyToManyField(User, related_name='favorites', blank=True, null = True)
+    favorited = models.ManyToManyField(User, related_name='favorites', blank=True)
     image = models.ImageField(upload_to='uploads/properties')
     landlord = models.ForeignKey(User, related_name='properties', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

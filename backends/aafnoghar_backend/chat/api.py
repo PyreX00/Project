@@ -8,4 +8,4 @@ from .serializers import ConverstaionListSerializer
 def conversations_list(request):
     serializer = ConverstaionListSerializer(request.user.conversations.all(),many=True)
     
-    return JsonResponse(serializer.data)
+    return JsonResponse(serializer.data,safe=False)

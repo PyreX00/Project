@@ -1,5 +1,7 @@
+
+
 import apiService from "../services/apiService";
-import Conversation from "../components/inbox/Converstaion";  
+import Conversation from "../components/inbox/Conversation";  
 import React,{useState,useEffect } from 'react'
 import { getUserId } from "../lib/actions";
 
@@ -35,7 +37,11 @@ export type ConversationType = {
 
             {conversations.map((conversation: ConversationType ) => {
                 return (
-                        <Conversation/>
+                        <Conversation 
+                            key={conversation.id}
+                            conversation={conversation}  
+                            userId={userId}   
+                        />
                 )
             })}
 

@@ -1,4 +1,4 @@
-import ConversationDetail from "@/app/components/inbox/ConverstaionDetail";
+import ConversationDetail from "@/app/components/inbox/ConversationDetail";
 
 const ConversationPage = () =>{
     return (

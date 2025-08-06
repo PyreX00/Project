@@ -8,87 +8,153 @@ import useSignupModal from "@/app/hooks/useSignupModal";
 import apiService from "@/app/services/apiService";
 import { handleLogin } from "@/app/lib/actions";
 
-
-const SignupModal = () =>{ 
-    
+const SignupModal = () => { 
     const router = useRouter();
-    const[email,setEmail]= useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [password1, setPassword1] = useState('');
     const [password2, setPassword2] = useState('');
-    const[errors,setErrors] = useState<string[]>([]);
+    const [errors, setErrors] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
+    const signupModal = useSignupModal();
 
-    const signupModal = useSignupModal()
+    const submitSignup = async (e?: React.FormEvent) => {
+        e?.preventDefault(); // Prevent form default submission
+        setIsLoading(true);
+        setErrors([]); // Clear previous errors
 
-    const submitSignup = async () => {
         const formData = {
+            name: name,
             email: email,
             password1: password1,
             password2: password2,
+        };
+
+        try {
+            const response = await apiService.postWithoutToken('/api/auth/register/', JSON.stringify(formData)); 
+
+            if (response.access) {
+                handleLogin(response.user.pk, response.access, response.refresh);
+                signupModal.close();
+                router.refresh();
+            } else {
+                // Handle validation errors
+                const tmpErrors: string[] = [];
+                
+                // Process errors properly
+                Object.keys(response).forEach((key) => {
+                    const errorValue = response[key];
+                    if (Array.isArray(errorValue)) {
+                        // If it's an array of errors, add each one
+                        tmpErrors.push(...errorValue);
+                    } else if (typeof errorValue === 'string') {
+                        // If it's a string, add it directly
+                        tmpErrors.push(errorValue);
+                    }
+                });
+
+                setErrors(tmpErrors);
+            }
+        } catch (error: any) {
+            console.error('Registration error:', error);
+            
+            // Handle different types of errors
+            if (error.response?.data) {
+                const errorData = error.response.data;
+                const tmpErrors: string[] = [];
+                
+                Object.keys(errorData).forEach((key) => {
+                    const errorValue = errorData[key];
+                    if (Array.isArray(errorValue)) {
+                        tmpErrors.push(...errorValue);
+                    } else if (typeof errorValue === 'string') {
+                        tmpErrors.push(errorValue);
+                    }
+                });
+                
+                setErrors(tmpErrors.length > 0 ? tmpErrors : ['Registration failed. Please try again.']);
+            } else {
+                setErrors(['Network error. Please try again.']);
+            }
+        } finally {
+            setIsLoading(false);
         }
-
-        const response = await apiService.postWithoutToken ('/api/auth/register/', JSON.stringify(formData)); 
-
-        if ( response.access){
-  
-            handleLogin(response.user.pk, response.access, response.refresh)
-
-            signupModal.close()
-
-            router.refresh()
-        } else {
-            const tmpErrors: string[] = Object.values(response).map((error: any) =>{
-                return error;
-            })
-
-            setErrors(tmpErrors);
-        }   
-         
-    }
+    };
 
     const content = (
-
         <>
-        <h2 className="mb-6 text-2xl"> Welcome to AafnoGhar, please login</h2>
-        <form 
-            action={submitSignup}
-        className="space-y-4"> 
-            <input onChange={(e)=> setEmail(e.target.value)} type ="Email" placeholder="Email" className="w-full h-[54px] px-4 border bordery-gray-300 rounded-xl"/>
+            <h2 className="mb-6 text-2xl">Welcome to AafnoGhar, please sign up</h2>
+            <form 
+                onSubmit={submitSignup}
+                className="space-y-4"
+            > 
+                <input 
+                    onChange={(e) => setName(e.target.value)} 
+                    type="text" 
+                    placeholder="Full Name" 
+                    value={name}
+                    className="w-full h-[54px] px-4 border border-gray-300 rounded-xl"
+                    required
+                />
 
-            <input onChange={(e)=> setPassword1(e.target.value)} type ="Password" placeholder="password" className="w-full h-[54px] px-4 border bordery-gray-300 rounded-xl"/>
-            
-            <input onChange={(e)=> setPassword2(e.target.value)} type ="Password" placeholder="password" className="w-full h-[54px] px-4 border bordery-gray-300 rounded-xl"/>
-            
-            {errors.map((error, index)=>{
-                return(
-                    <div 
-                    key ={`error_${index}`}
-                    className="p-5 bg-airbnb text-white rounded-xl opacity-80">
-                    {error}
+                <input 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    type="email" 
+                    placeholder="Email" 
+                    value={email}
+                    className="w-full h-[54px] px-4 border border-gray-300 rounded-xl"
+                    required
+                />
+
+                <input 
+                    onChange={(e) => setPassword1(e.target.value)} 
+                    type="password" 
+                    placeholder="Password" 
+                    value={password1}
+                    className="w-full h-[54px] px-4 border border-gray-300 rounded-xl"
+                    required
+                />
+                
+                <input 
+                    onChange={(e) => setPassword2(e.target.value)} 
+                    type="password" 
+                    placeholder="Confirm Password" 
+                    value={password2}
+                    className="w-full h-[54px] px-4 border border-gray-300 rounded-xl"
+                    required
+                />
+                
+                {errors.length > 0 && (
+                    <div className="space-y-2">
+                        {errors.map((error, index) => (
+                            <div 
+                                key={`error_${index}`}
+                                className="p-3 bg-red-500 text-white rounded-xl"
+                            >
+                                {error}
+                            </div>
+                        ))}
                     </div>
+                )}  
 
-                )
-            })}  
-
-            <CustomButton 
-            label={"Submit"}
-            onClick={submitSignup}
-
-            />
-        </form>
-
+                <CustomButton 
+                    label={isLoading ? "Signing up..." : "Submit"}
+                    onClick={submitSignup}
+                    // disabled={isLoading}
+                />
+            </form>
         </>
-    )
+    );
 
-    return(
+    return (
         <Modal 
-            isOpen = {signupModal.isOpen}
+            isOpen={signupModal.isOpen}
             close={signupModal.close}
             label="Sign up"
-            content = {content} 
-            />
-
-    )
-}
+            content={content} 
+        />
+    );
+};
 
 export default SignupModal;

@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "your-fallback-secret-key-for-development")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
@@ -33,20 +33,21 @@ SITE_ID = 1
 
 WEBSITE_URL = 'http://localhost:8000/'
 
+# Fixed Channel Layers Configuration
 CHANNEL_LAYERS = {
-    'default':{
-        'BACKEND':'channels.layersInMemoryChannelLayer'
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'  # Fixed typo and correct backend
     }
 }
 
 SIMPLE_JWT = {
-    "ACCES_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME":timedelta(days=7),
-    "ROTATE_REFRESH_TOKEN":False,
-    "BLACK_LIST_LOGIN":True,
-    "UPDATE_LAST_LOGIN":True,
-    "SIGNING_KEY":"ASD",
-    "ALGORITHM":"HS512",
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),  # Fixed typo: ACCES -> ACCESS
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKEN": False,
+    "BLACKLIST_AFTER_ROTATION": True,  # Fixed: BLACK_LIST_LOGIN doesn't exist
+    "UPDATE_LAST_LOGIN": True,
+    "SIGNING_KEY": "ASD",
+    "ALGORITHM": "HS512",
 }
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None 
@@ -58,31 +59,28 @@ ACCOUNT_EMAIL_VERIFICATION = None
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        # or 'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-        # maybe IsAuthenticatedOrReadOnly or AllowAny for certain views
     ],
 }
 
-
-CORS_ALLOWED_ORIGIN = [
-    'http://127.0.0.1:8000/',
-    'http://127.0.0.1:3000/',
+CORS_ALLOWED_ORIGINS = [  # Fixed typo: ORIGIN -> ORIGINS
+    'http://127.0.0.1:8000',   # Removed trailing slash
+    'http://127.0.0.1:3000',   # Removed trailing slash
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-
-REST_AUTH ={
+REST_AUTH = {
     "USE_JWT": True,
-    "JWT_AUTH_HTTPONLY":False,
+    "JWT_AUTH_HTTPONLY": False,
 }
 
 # Application definition
-
 INSTALLED_APPS = [
+    'daphne',  # Should be first for ASGI
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -90,11 +88,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # Your apps
     'useraccount',
     'property',
     'chat',
     
-    
+    # Third party apps
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -106,10 +105,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     
     'corsheaders',
-    
-    'daphne'
-    
-    
+    'channels',  # ADDED: This was missing and is crucial for WebSocket support
 ]
 
 MIDDLEWARE = [
@@ -143,25 +139,19 @@ TEMPLATES = [
 WSGI_APPLICATION = 'aagnoghar_backend.wsgi.application'
 ASGI_APPLICATION = 'aagnoghar_backend.asgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get("SQL_ENGINE"),
-        'NAME':os.environ.get("SQL_DATABASE"),
-        'USER': os.environ.get("SQL_USER"),
-        'PASSWORD': os.environ.get("SQL_PASSWORD"),
-        'HOST':os.environ.get("SQL_HOST"),
-        'PORT':os.environ.get("SQL_PORT"),
+        'ENGINE': os.environ.get("SQL_ENGINE", 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get("SQL_DATABASE", BASE_DIR / 'db.sqlite3'),
+        'USER': os.environ.get("SQL_USER", ''),
+        'PASSWORD': os.environ.get("SQL_PASSWORD", ''),
+        'HOST': os.environ.get("SQL_HOST", ''),
+        'PORT': os.environ.get("SQL_PORT", ''),
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -177,29 +167,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'useraccount.User'

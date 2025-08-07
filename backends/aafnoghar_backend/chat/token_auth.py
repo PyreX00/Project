@@ -16,7 +16,7 @@ def get_user(token_key):
         return AnonymousUser
     
     
-class TokenAuthMiddleWare(BaseMiddleware):
+class TokenAuthMiddleware(BaseMiddleware):
     def __init__(self,inner):
         self.inner = inner
         

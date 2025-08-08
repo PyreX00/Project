@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 
 import apiService from '@/app/services/apiService';
 import useLoginModal from '@/app/hooks/useLoginModal';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -14,7 +15,12 @@ export type Property = {
     id: string;
     rent: number;
     guests: number;
+    landlord?: {
+        id: string;
+        name?: string;
+    };
 }
+
 
 interface ReservationSidebarProps {
     userId: string | null,
@@ -27,15 +33,55 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
     userId
 }) => {
     const loginModal = useLoginModal();
+    const router = useRouter();
 
 
     const [rent, setRent] = useState<number>(0);
     const [guests, setGuests] = useState<number>(1);
     const [profession, setProfession] = useState<string>('');
-    const [renter, setRenter] = useState<string>('M'); 
+    const [renter, setRenter] = useState<string>('M');
+    const [isBooking, setIsBooking] = useState<boolean>(false);
     
+        const sendDefaultMessage = async (conversationId: string, userDetails: any) => {
+        try {
+                        const renterTypeText = renter === 'M' ? 'Male' : renter === 'F' ? 'Female' : 'Family';
+                        const message = `Hi! I am interested in your property. Here are my details:
+            • Profession: ${profession}
+            • Number of people: ${guests}
+            • Renter type: ${renterTypeText}
+            • Property: Rs. ${property.rent.toLocaleString()}/month
 
-    const preformbooking= async () => {
+            Please let me know about availability and next steps.`;
+
+                    const messageData = new FormData();
+                    messageData.append('body', message);
+
+                    await apiService.post(`/api/chat/${conversationId}/`, messageData);
+                    return true;
+                } catch (error) {
+                    console.error('Error sending default message:', error);
+                    return false;
+                }
+            };
+
+    const startConversation = async (landlordId: string) => {
+        try {
+            const conversation = await apiService.get(`/api/chat/start/${landlordId}/`);
+
+            if (conversation.conversation_id) {
+                router.push(`/inbox/${conversation.conversation_id}`);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Error starting conversation:', error);
+            return false;
+        }
+    };
+
+    const preformBooking= async () => {
+        setIsBooking(true);
+
         if(userId){
             const formData = new FormData();
             formData.append('guests',guests.toString()); 
@@ -46,6 +92,15 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
             
             if (response.success){
                 console.log("Booking finished")
+
+                if (property.landlord?.id) {
+                    const conversationStarted = await startConversation(property.landlord.id);
+                    if (!conversationStarted) {
+                        alert("Booking completed! However, couldn't start conversation. You can contact the landlord from your inbox.");
+                    }
+                } else {
+                    console.warn("No landlord ID available to start conversation");
+                }
             }else{
                 console.log("Failed")
             }
@@ -104,14 +159,16 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
 
             
             <button
-                onClick={() => {
-                        preformbooking();
-                        alert("Booking successful");
-                    }}
-                    className="w-full mb-5 py-4 text-xl text-center text-white bg-airbnb rounded-xl hover:bg-airbnb-dark transition-colors font-semibold"
-                >
-                    Book an Appointment
-                </button>
+                onClick={preformBooking}
+                disabled={isBooking}
+                className={`w-full mb-5 py-4 text-xl text-center text-white rounded-xl font-semibold transition-colors ${
+                    isBooking 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-airbnb hover:bg-airbnb-dark'
+                }`}
+            >
+                {isBooking ? 'Processing...' : 'Book an Appointment'}
+            </button>
             
 
         </aside>

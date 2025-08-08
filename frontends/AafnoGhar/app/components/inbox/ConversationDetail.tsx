@@ -10,18 +10,20 @@ interface ConversationDetailProps {
     userId: string;
     token: string;
     conversation: ConversationType;
+    messages:MessageType[]
 }
 
 const ConversationDetail: React.FC<ConversationDetailProps> = ({
     userId,
     token,
+    messages,
     conversation
 }) => {
     const messagesDiv = useRef<HTMLDivElement>(null);
     const [newMessage, setNewMessage] = useState('');
     const myUser = conversation?.users?.find((user) => user.id == userId);
     const otherUser = conversation?.users?.find((user) => user.id !== userId);
-    // Fix: Initialize as empty array, not undefined
+
     const [realtimeMessages, setRealtimeMessages] = useState<MessageType[]>([]);
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
@@ -31,6 +33,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
             shouldReconnect: () => true
         }
     );
+
 
     useEffect(() => {
         console.log("Connection state changed", readyState);
@@ -102,17 +105,26 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                 ref={messagesDiv}
                 className="max-h-[400px] overflow-auto flex flex-col space-y-4 p-4">
                 
-                {/* Show loading state if no messages yet */}
-                {realtimeMessages.length === 0 && (
-                    <div className="text-center text-gray-500 py-8">
-                        No messages yet. Start the conversation!
-                    </div>
-                )}
+                 {/* Show existing messages first */}
+                {messages && messages.length > 0 ? (
+                    messages.map((message, index) => (
+                        <div 
+                            key={`existing-${message.id || index}`}
+                            className={`w-[80%] py-4 px-6 rounded-xl ${
+                                message.created_by.name === myUser?.name 
+                                    ? 'ml-[20%] bg-blue-200' 
+                                    : 'bg-gray-200'
+                            }`}>
+                            <p className="font-bold text-gray-500">{message.created_by.name}</p>
+                            <p>{message.body}</p>
+                        </div>
+                    ))
+                ) : null}
 
-                {/* Render realtime messages */}
+                {/* Show realtime messages */}
                 {realtimeMessages.map((message, index) => (
                     <div 
-                        key={index}
+                        key={`realtime-${message.id || index}`}
                         className={`w-[80%] py-4 px-6 rounded-xl ${
                             message.name === myUser?.name 
                                 ? 'ml-[20%] bg-blue-200' 
@@ -122,6 +134,13 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                         <p>{message.body}</p>
                     </div>
                 ))}
+
+                {/* Show message when no messages exist */}
+                {(!messages || messages.length === 0) && realtimeMessages.length === 0 && (
+                    <div className="text-center text-gray-500 py-8">
+                        No messages yet. Start the conversation!
+                    </div>
+                )}
             </div>
 
             <div className="mt-4 py-4 px-6 flex border border-gray-300 space-x-4 rounded-xl">
@@ -141,7 +160,6 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                     className="w-[100px]"
                 />
             </div>
-
         </>
     );
 };

@@ -11,7 +11,7 @@ export type MessageType = {
     name:string;
     body:string;
     conversationId:string;
-    sent_to:string;
+    sent_to:UserType;
     created_by: UserType;
 
 }
@@ -20,7 +20,7 @@ const ConversationPage = async ({ params }:{ params :{ id:string }}) =>{
     const userId = await getUserId();
     const token = await getAccessToken();
 
-    if ( !userId){
+    if ( !userId || !token){
         return (
             <main className=" max-w-[1500px] mx-auto px-6 py-12">
                 <p> You need to be authenticated.... </p>
@@ -36,7 +36,7 @@ const ConversationPage = async ({ params }:{ params :{ id:string }}) =>{
             <ConversationDetail
                 token ={token}
                 userId ={userId}
-                conversation = {conversation}
+                conversation = {conversation.conversation}
             
             />
         </main>

@@ -23,9 +23,6 @@ const SearchFilter = () =>{
     </div>
   </div>
 </div>
-
-
-
     )
 }
 

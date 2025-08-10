@@ -1,6 +1,8 @@
 import Categories from "./components/Categories";
 import PropertyList from "./components/properties/PropertyList";
 
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
       < main className = "max-w-[2000px] mx-auto px-6">

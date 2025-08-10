@@ -1,6 +1,8 @@
 import PropertyList  from "../components/properties/PropertyList";
 import { getUserId } from "../lib/actions";
 
+export const dynamic = 'force-dynamic';
+
 const MyFavoritesPage = async () => {
     const userId =  await getUserId ();
 

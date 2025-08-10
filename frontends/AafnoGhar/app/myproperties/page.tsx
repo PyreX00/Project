@@ -2,6 +2,8 @@ import Image from 'next/image'
 import { getUserId } from '../lib/actions';
 import PropertyList from '../components/properties/PropertyList';
 
+export const dynamic = 'force-dynamic';
+
  const MyProperties = async () =>{
 
     const userId = await getUserId();

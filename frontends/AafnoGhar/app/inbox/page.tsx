@@ -15,6 +15,7 @@ export type ConversationType = {
     id:string;
     users:UserType[];
 }
+export const dynamic = 'force-dynamic';
 
  const InboxPage = async () =>{
 

@@ -1,5 +1,7 @@
 import Image from 'next/image'
 
+export const dynamic = 'force-dynamic';
+
  const AppointmentPage = () =>{
     return(
         <main className="max-w-[2000px] mx-auto px-6 mt-6 pb-6">

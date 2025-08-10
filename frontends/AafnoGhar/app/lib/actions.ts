@@ -36,7 +36,7 @@ export async function handleRefresh() {
             // Set the new access token
             (await cookies()).set('session_access_token', json.access, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: false,
                 maxAge: 60 * 60, // 1 hour
                 path: '/'
             });
@@ -58,21 +58,21 @@ export async function handleLogin(userId: string, accessToken: string, refreshTo
     try {
         (await cookies()).set('session_userid', userId, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             maxAge: 60 * 60 * 24 * 7, // 7 days
             path: '/'
         });
 
         (await cookies()).set('session_access_token', accessToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             maxAge: 60 * 60, // 1 hour
             path: '/'
         });
 
         (await cookies()).set('session_refresh_token', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             maxAge: 60 * 60 * 24 * 7, // 7 days
             path: '/'
         });

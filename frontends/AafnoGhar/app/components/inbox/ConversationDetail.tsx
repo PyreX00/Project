@@ -27,7 +27,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
     const [realtimeMessages, setRealtimeMessages] = useState<MessageType[]>([]);
 
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
-        `ws://127.0.0.1:8000/ws/${conversation.id}/?token=${token}`,
+        `${process.env.NEXT_PUBLIC_WS_HOST}/${conversation.id}/?token=${token}`,
         {
             share: false,
             shouldReconnect: () => true
@@ -39,7 +39,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
         console.log("Connection state changed", readyState);
     }, [readyState]);
 
-    // Fix: Move scrollToBottom function outside of sendMessage and useEffect
+
     const scrollToBottom = () => {
         if (messagesDiv.current) {
             messagesDiv.current.scrollTop = messagesDiv.current.scrollHeight;
@@ -51,7 +51,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
             console.log('Received message:', lastJsonMessage);
             
             const message: MessageType = {
-                id: '', // You might want to generate a proper ID
+                id: '', 
                 name: lastJsonMessage.name as string,
                 body: lastJsonMessage.body as string,
                 sent_to: otherUser as UserType,
@@ -59,20 +59,20 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                 conversationId: conversation.id
             };
 
-            // Fix: Use functional update to avoid stale closure
+            
             setRealtimeMessages((prevMessages) => [...prevMessages, message]);
         }
 
-        // Scroll to bottom when new message arrives
+        
         setTimeout(() => {
             scrollToBottom();
         }, 100);
-    }, [lastJsonMessage, otherUser, myUser, conversation.id]); // Fix: Remove colon, add dependencies
+    }, [lastJsonMessage, otherUser, myUser, conversation.id]); 
 
     const sendMessage = async () => {
-        if (!newMessage.trim()) return; // Don't send empty messages
+        if (!newMessage.trim()) return; 
 
-        // Fix: Correct the typo from 'even' to 'event'
+       
         sendJsonMessage({
             event: 'chat_message',
             data: {
@@ -85,13 +85,13 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
 
         setNewMessage('');
 
-        // Scroll to bottom after sending
+        
         setTimeout(() => {
             scrollToBottom();
         }, 50);
     };
 
-    // Handle Enter key press
+  
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -105,7 +105,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                 ref={messagesDiv}
                 className="max-h-[400px] overflow-auto flex flex-col space-y-4 p-4">
                 
-                 {/* Show existing messages first */}
+                 
                 {messages && messages.length > 0 ? (
                     messages.map((message, index) => (
                         <div 
@@ -121,7 +121,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                     ))
                 ) : null}
 
-                {/* Show realtime messages */}
+                
                 {realtimeMessages.map((message, index) => (
                     <div 
                         key={`realtime-${message.id || index}`}
@@ -135,7 +135,7 @@ const ConversationDetail: React.FC<ConversationDetailProps> = ({
                     </div>
                 ))}
 
-                {/* Show message when no messages exist */}
+               
                 {(!messages || messages.length === 0) && realtimeMessages.length === 0 && (
                     <div className="text-center text-gray-500 py-8">
                         No messages yet. Start the conversation!

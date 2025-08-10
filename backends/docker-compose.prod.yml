@@ -5,13 +5,15 @@ services:
       - 1337:80
     depends_on:
       - web
+    volumes:
+      - media_volume:/usr/src/aafnoghar_backend/media
   
   web:
     build: ./aafnoghar_backend
     command: gunicorn aafnoghar_backend.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      # Fix the volume mapping
-      - ./aafnoghar_backend/:/usr/src/app/
+      - ./aafnoghar_backend/:/usr/src/aafnoghar_backend/
+      - media_volume:/usr/src/aafnoghar_backend/media
     expose:
       - 8000
     env_file:
@@ -44,3 +46,4 @@ services:
   
 volumes:
   postgres_data:
+  media_volume:

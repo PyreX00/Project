@@ -1,11 +1,20 @@
-'use server';
-
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
 import apiService from '../services/apiService';
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
 
 const MyReservationPage = async () => {
     try {
         const response = await apiService.get('/api/auth/myreservations/');
+        
+        // Check if the response indicates an authentication error
+        if (response && response.code === 'token_not_valid') {
+            console.log('Token invalid, redirecting to login');
+            redirect('/login'); // Adjust this to your actual login route
+            return null;
+        }
         
         // Debug: Log the full response to understand the structure
         console.log('Full API response:', response);
@@ -42,7 +51,7 @@ const MyReservationPage = async () => {
                     ) : (
                         reservations.map((reservation: any) => (
                             <div 
-                                key={reservation.id} // Add key prop
+                                key={reservation.id || reservation.uuid || Math.random()} // Fallback key
                                 className="p-5 grid grid-cols-1 md:grid-cols-4 gap-4 shadow-md border border-gray-300 rounded-xl"
                             >
                                 <div className="col-span-1">
@@ -86,6 +95,12 @@ const MyReservationPage = async () => {
         
     } catch (error) {
         console.error('Error fetching reservations:', error);
+        
+        // If it's an authentication error, redirect to login
+        if (error && typeof error === 'object' && 'code' in error && error.code === 'token_not_valid') {
+            redirect('/login');
+            return null;
+        }
         
         return (
             <main className="max-w-[1500px] mx-auto px-6 pb-6">

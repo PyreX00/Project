@@ -110,15 +110,10 @@ export async function getUserId() {
     }
 }
 
+// FIXED: Remove automatic refresh to prevent infinite loop
 export async function getAccessToken() {
     try {
-        let accessToken = (await cookies()).get('session_access_token')?.value;
-        
-        if (!accessToken) {
-            console.log('No access token found, attempting refresh...');
-            accessToken = await handleRefresh();
-        }
-
+        const accessToken = (await cookies()).get('session_access_token')?.value;
         return accessToken || null;
     } catch (error) {
         console.error('Error getting access token:', error);
@@ -136,9 +131,39 @@ export async function getRefreshToken() {
     }
 }
 
-// Additional utility function to check if user is authenticated
+// FIXED: Better authentication check
 export async function isAuthenticated() {
     const userId = await getUserId();
     const accessToken = await getAccessToken();
-    return !!(userId && accessToken);
+    const refreshToken = await getRefreshToken();
+    
+    // User is authenticated if they have userId and either access token OR refresh token
+    return !!(userId && (accessToken || refreshToken));
+}
+
+// NEW: Function to get access token with refresh fallback
+export async function getValidAccessToken() {
+    try {
+        // First try to get existing access token
+        let accessToken = await getAccessToken();
+        
+        if (accessToken) {
+            return accessToken;
+        }
+        
+        // If no access token, try to refresh (only if we have a refresh token)
+        const refreshToken = await getRefreshToken();
+        if (refreshToken) {
+            console.log('No access token found, attempting refresh...');
+            accessToken = await handleRefresh();
+            return accessToken;
+        }
+        
+        // No tokens available
+        console.log('No tokens available for authentication');
+        return null;
+    } catch (error) {
+        console.error('Error getting valid access token:', error);
+        return null;
+    }
 }

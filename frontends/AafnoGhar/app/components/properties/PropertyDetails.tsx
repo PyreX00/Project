@@ -1,9 +1,25 @@
 import Image from 'next/image';
-import apiService from '@/app/services/apiService';
 
-const PropertyDetails = async ({params}:{params : { id : string}}) => {
-const property = await apiService.get(`/api/properties/${params.id}`)
+// Define the property type (adjust based on your API response)
+interface Property {
+  id: string;
+  location?: string;
+  bedroom?: string | number;
+  kitchen?: string | number;
+  toilet?: string | number;
+  parking?: string;
+  size?: string;
+  preferred?: string;
+  no_of_people?: string | number;
+  // Add other property fields as needed
+}
 
+interface PropertyDetailsProps {
+  property: Property;
+  propertyId?: string; // Optional, in case you need the ID
+}
+
+const PropertyDetails = ({ property, propertyId }: PropertyDetailsProps) => {
   const formatValue = (key: string, value: any) => {
     if (!value) return 'N/A';
     
@@ -38,15 +54,14 @@ const property = await apiService.get(`/api/properties/${params.id}`)
   };
 
   const features = [
-    { label: 'Bedroom', icon: '/icons/bedroom.svg', value: formatValue('bedroom', property.bedroom)},
+    { label: 'Bedroom', icon: '/icons/bedroom.svg', value: formatValue('bedroom', property.bedroom) },
     { label: 'Kitchen', icon: '/icons/kitchen.svg', value: formatValue('kitchen', property.kitchen) },
     { label: 'Toilet', icon: '/icons/toilet.svg', value: formatValue('toilet', property.toilet) },
-    { label: 'Parking', icon: '/icons/parking.svg', value: formatValue('parking', property.parking)},
+    { label: 'Parking', icon: '/icons/parking.svg', value: formatValue('parking', property.parking) },
     { label: 'Size', icon: '/icons/size.svg', value: formatValue('size', property.size) },
     { label: 'Preferred', icon: '/icons/preferred.svg', value: formatValue('preferred', property.preferred) },
     { label: 'No of People', icon: '/icons/people.svg', value: formatValue('no_of_people', property.no_of_people) },
   ];
-  
 
   return (
     <div className="max-w-4xl mx-auto mt-8 px-4">

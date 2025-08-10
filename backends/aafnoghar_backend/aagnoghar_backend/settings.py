@@ -30,8 +30,10 @@ DEBUG = os.environ.get("DEBUG")
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 
 SITE_ID = 1
-
-WEBSITE_URL = 'http://localhost:8000/'
+if DEBUG:
+    WEBSITE_URL = 'http://localhost:8000/'
+else:
+    WEBSITE_URL ='http://165.232.186.192:1337'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -68,10 +70,26 @@ REST_FRAMEWORK = {
 }
 
 
-CORS_ALLOWED_ORIGIN = [
+CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://127.0.0.1:3000',
+    'http://165.232.186.192',
+    'http://165.232.186.192:1337',
 ]
+CORS_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:3000',
+    'http://165.232.186.192',
+    'http://165.232.186.192:1337',
+]
+CORS_ORIGINS_WHITELIST = [
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:3000',
+    'http://165.232.186.192',
+    'http://165.232.186.192:1337',
+]
+
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 

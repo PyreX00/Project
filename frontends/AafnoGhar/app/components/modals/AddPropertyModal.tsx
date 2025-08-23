@@ -118,7 +118,8 @@ const AddPropertyModal = () => {
                     label = 'Next'
                     onClick={() => setCurrentStep(2)}
                 />
-            </>): currentStep == 2 ? (
+            </>
+            ): currentStep == 2 ? (
                 <>
                     <h2 className="mb-6 text-2xl">Describe your place </h2>  
                     < div className="pt-3 pb-6 space-y-4">
@@ -132,7 +133,7 @@ const AddPropertyModal = () => {
                                 />
                         </div>
                            <div className=" flex flex-col space-y-2">
-                            <label> Title</label>
+                            <label> Description </label>
                             <textarea
     
                                 value={dataDescription}

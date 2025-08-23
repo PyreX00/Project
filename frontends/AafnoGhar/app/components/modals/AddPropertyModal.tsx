@@ -109,10 +109,12 @@ const AddPropertyModal = () => {
             <>
                 <h2 className="mb-6 text-2xl"> Choose category </h2>
 
-                <Categories
-                    dataCategory={dataCategory}
-                    setCategory={(category) => setCategory(category)}
-                />
+                <div className="mb-6 w-full overflow-hidden">
+                    <Categories
+                        dataCategory={dataCategory}
+                        setCategory={(category) => setCategory(category)}
+                    />
+                </div>
 
                 < CustomButton 
                     label = 'Next'

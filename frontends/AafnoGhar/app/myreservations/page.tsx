@@ -2,39 +2,39 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import apiService from '../services/apiService';
 
-// Force dynamic rendering for this page
+
 export const dynamic = 'force-dynamic';
 
 const MyReservationPage = async () => {
     try {
         const response = await apiService.get('/api/auth/myreservations/');
         
-        // Check if the response indicates an authentication error
+      
         if (response && response.code === 'token_not_valid') {
             console.log('Token invalid, redirecting to login');
-            redirect('/login'); // Adjust this to your actual login route
+            redirect('/login'); 
             return null;
         }
         
-        // Debug: Log the full response to understand the structure
+        
         console.log('Full API response:', response);
         console.log('Type of response:', typeof response);
         console.log('Is array:', Array.isArray(response));
         
-        // Handle different possible response structures
+        
         let reservations;
         
         if (Array.isArray(response)) {
-            // Direct array response
+            
             reservations = response;
         } else if (response && Array.isArray(response.data)) {
-            // Response wrapped in data property
+            
             reservations = response.data;
         } else if (response && Array.isArray(response.results)) {
-            // Paginated response with results array
+            
             reservations = response.results;
         } else {
-            // Fallback to empty array if structure is unexpected
+            
             console.error('Unexpected response structure:', response);
             reservations = [];
         }
@@ -70,7 +70,7 @@ const MyReservationPage = async () => {
                                         <strong>Guests:</strong> {reservation.property?.noofpeople}
                                     </p>
                                     
-                                    {/* Add more reservation details */}
+                                    
                                     {reservation.check_in_date && (
                                         <p className="mb-2">
                                             <strong>Check-in:</strong> {new Date(reservation.check_in_date).toLocaleDateString()}

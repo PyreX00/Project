@@ -6,17 +6,17 @@ import apiService from '@/app/services/apiService';
 import { getUserId } from '@/app/lib/actions';
 import Link from 'next/link';
 
-// Fix the interface for Next.js 15+
+
 interface PropertyDetailPageProps {
     params: Promise<{ id: string }>;
 }
 
 const PropertyDetailPage = async ({ params }: PropertyDetailPageProps) => {
-    // Await the params promise
+    
     const { id } = await params;
     
     try {
-        // Use the awaited id parameter
+        
         const property = await apiService.get(`/api/properties/${id}`);
         const userId = await getUserId();
 
@@ -24,12 +24,12 @@ const PropertyDetailPage = async ({ params }: PropertyDetailPageProps) => {
             <main className='w-full px-6'>
                 <div className='max-w-[2000px] mx-auto mt-4 grid grid-cols-1 md:grid-cols-4'>
                     <div className='py-6 pr-6 h-[32vh] lg:h-[64vh] col-span-3'>
-                        <LoadImages />
+                        <LoadImages propertyId={id} property={property} />
                     </div>
                     <div className=''>
                         <div>
                             <h1 className='mb-4 text-4xl'>{property.title}</h1>
-                            {/* Pass the awaited params or just the id */}
+                            
                             <ProperytDetails propertyId={id} property={property} /> 
                         </div>
                     </div>
@@ -97,3 +97,4 @@ const PropertyDetailPage = async ({ params }: PropertyDetailPageProps) => {
 }
 
 export default PropertyDetailPage;
+

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-// Define the property type (adjust based on your API response)
+
 interface Property {
   id: string;
   location?: string;
@@ -11,12 +11,12 @@ interface Property {
   size?: string;
   preferred?: string;
   no_of_people?: string | number;
-  // Add other property fields as needed
+  
 }
 
 interface PropertyDetailsProps {
   property: Property;
-  propertyId?: string; // Optional, in case you need the ID
+  propertyId?: string; 
 }
 
 const PropertyDetails = ({ property, propertyId }: PropertyDetailsProps) => {
@@ -65,7 +65,7 @@ const PropertyDetails = ({ property, propertyId }: PropertyDetailsProps) => {
 
   return (
     <div className="max-w-4xl mx-auto mt-8 px-4">
-      {/* Address - Full width, single column */}
+      
       <div className="mb-6">
         <div className="flex items-center bg-blue-50 p-4 rounded-lg shadow-sm border border-blue-200">
           <div className="flex items-center gap-3">
@@ -84,7 +84,7 @@ const PropertyDetails = ({ property, propertyId }: PropertyDetailsProps) => {
         </div>
       </div>
 
-      {/* Other features - Two columns */}
+    
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {features.map((feature, index) => (
           <div

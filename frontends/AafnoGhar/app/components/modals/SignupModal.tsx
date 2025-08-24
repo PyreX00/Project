@@ -25,7 +25,7 @@ const SignupModal = () => {
         setErrors([]); // Clear previous errors
 
         const formData = {
-            name: name,
+            username: name,
             email: email,
             password1: password1,
             password2: password2,

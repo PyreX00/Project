@@ -3,7 +3,7 @@ import { Home, Phone, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin, Shie
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-white text-gray-900">
+    <footer className="bg-white text-gray-900 border-t border-gray-200 mt-8">
       {/* Main Footer Content */}
       <div className="max mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

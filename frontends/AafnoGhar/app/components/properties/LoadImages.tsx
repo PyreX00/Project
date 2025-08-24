@@ -40,16 +40,16 @@ const SingleImage: React.FC<SingleImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const getImageSource = () => {
-    // Priority: direct imageUrl prop > property.image > fallback
+   
     if (imageUrl) return imageUrl;
     if (property?.image) {
-      // Handle relative paths from API
+      
       if (property.image.startsWith('/')) {
         return `http://localhost:8000${property.image}`;
       }
       return property.image;
     }
-    return '/room-1.jpg'; // fallback image
+    return '/room-1.jpg';
   };
 
   const handleImageLoad = () => {
@@ -89,11 +89,11 @@ const SingleImage: React.FC<SingleImageProps> = ({
       console.log('🖼️ Loading image:', imageUrl);
       console.log('📦 Property data:', property);
       
-      // Test image accessibility with more detailed logging
+      
       const testImg = new Image();
       testImg.onload = () => {
-        console.log('✅ Image preload successful');
-        // If preload works but main image is still loading, force show it
+        console.log(' Image preload successful');
+        
         setTimeout(() => {
           if (isLoading) {
             console.log('🔄 Preload successful but main image still loading, forcing display');
@@ -106,7 +106,7 @@ const SingleImage: React.FC<SingleImageProps> = ({
       testImg.src = imageUrl;
     }, [property, propertyId, imageUrl, isLoading]);
 
-  // Loading state
+  
   if (isLoading && !imageError) {
     return (
       <div style={containerStyle}>

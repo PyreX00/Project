@@ -20,9 +20,9 @@ const ContactButton = ({ landlordId, landlordName }: ContactButtonProps) => {
         
         setIsLoading(true);
         try {
-            // Navigate to create a new conversation or existing inbox
+           
             router.push(`/inbox/create/${landlordId}`);
-            // Or: router.push(`/inbox?contact=${landlordId}`);
+            
             
         } catch (error) {
             console.error('Error initiating contact:', error);

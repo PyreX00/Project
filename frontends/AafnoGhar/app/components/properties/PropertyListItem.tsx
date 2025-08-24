@@ -8,7 +8,7 @@ interface PropertyProps {
     markFavorite?: (is_favorite: boolean) => void;
 }
 
-const PropertyListItem: React.FC<PropertyProps> = ({ // Fixed: removed >= and added =
+const PropertyListItem: React.FC<PropertyProps> = ({ 
     property,
     markFavorite
 }) => {

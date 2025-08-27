@@ -61,6 +61,9 @@ class Property(models.Model):
         if self.image and hasattr(self.image, 'url'):
             return f'{settings.WEBSITE_URL}{self.image.url}'
         
+    class Meta:
+        ordering = ['-created_at']
+        
 
 class Reservation(models.Model):
     

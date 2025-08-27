@@ -39,10 +39,10 @@ export default function RootLayout({
           {children}
          </div>
 
-         <LoginModal/>
-         <SignupModal/>
+        <LoginModal/>
+        <SignupModal/>
 
-         <AddPropertyModal/>
+        <AddPropertyModal/>
 
         <Footer/>
 

@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
     const userId = await getUserId();
 
     return(
-        <main className="max-w-[2000px] mx-auto px-6 mt-6 pb-6 space-y-4">
+        <main className="max-w-[2000px] h-[550px] mx-auto px-6 mt-6 pb-6 space-y-4">
             
             <h1 className="mt-6 mb-2 text-3xl pb-4 mb-6">My Properties</h1>
 

@@ -35,17 +35,18 @@ const Conversation: React.FC<ConversationProps> = ({
     }
 
     return (
-        <div className="px-6 py-4 border cursor-pointer border-gray-300 rounded-xl">
-            <p className="mb-6 text-xl">{otherUser?.name || 'Unknown User'}</p>
-            
-            <p 
-                className="text-airbnb-dark cursor-pointer hover:underline"
-                onClick={() => router.push(`/inbox/${conversation.id}`)}
-            > 
-                Go to Conversation
-            </p>
-        </div>
+    <div className="px-6 py-4 mb-5 border cursor-pointer border-gray-300 rounded-xl">
+        <p className="mb-6 text-xl">{otherUser?.name || 'Unknown User'}</p>
+
+        <p
+        className="text-airbnb-dark cursor-pointer hover:underline"
+        onClick={() => router.push(`/inbox/${conversation.id}`)}
+        >
+        Go to Conversation
+        </p>
+    </div>
     );
+
 }
 
 export default Conversation;

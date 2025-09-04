@@ -32,7 +32,7 @@ export const dynamic = 'force-dynamic';
     const conversations = await apiService.get('/api/chat/')
 
     return(
-        <main className="max-w-[2000px] mx-auto px-6 mt-6 pb-6">
+        <main className="max-w-[2000px] h-[650px] mx-auto px-6 mt-6 pb-6">
             
             <h1 className='mt-6 mb-2 text-2xl'>Inbox</h1>
 
